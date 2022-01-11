@@ -1,30 +1,30 @@
 {
   "name": "wetube",
   "version": "1.0.0",
-  "description": "The best way to watch videos.",
+  "description": "Excercising nodeJS, express, mongodb!",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nomadcoders/wetube-reloaded.git"
+    "url": "git+https://github.com/Wookji-Yoon/wetube2.git"
   },
   "scripts": {
     "dev": "nodemon --exec babel-node src/init.js"
   },
-  "author": "Nicolas Serrano <nico@nomadcoders.co>",
-  "license": "MIT",
+  "author": "Wookji-Yoon <yoonwj@gmail.com>",
+  "license": "FMA",
   "bugs": {
-    "url": "https://github.com/nomadcoders/wetube-reloaded/issues"
+    "url": "https://github.com/Wookji-Yoon/wetube2/issues"
   },
-  "homepage": "https://github.com/nomadcoders/wetube-reloaded#readme",
+  "homepage": "https://github.com/Wookji-Yoon/wetube2#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongoose": "^5.12.3",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/node": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
-    "nodemon": "^2.0.7"
+    "@babel/core": "^7.16.7",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.8",
+    "nodemon": "^2.0.15"
   }
 }
