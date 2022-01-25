@@ -117,7 +117,6 @@ export const finishGithubLogin = async (req, res) => {
     const emailOBj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
-    console.log(email);
     if (!emailOBj) {
       return res.direct("/login");
     }
@@ -150,5 +149,79 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getEdit = (req, res) =>
+  res.render("edit-profile.pug", { pageTitle: "Edit User!" });
+
+export const postEdit = async (req, res) => {
+  const pageTitle = "Edit User";
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  //error check
+  if (email !== req.session.email) {
+    const exists = await User.exists({ email });
+    if (exists) {
+      return res.status(400).render("edit-profile.pug", {
+        pageTitle,
+        errorMessage: `This email is already taken`,
+      });
+    }
+  }
+
+  if (username !== req.session.username) {
+    const exists = await User.exists({ username });
+    if (exists) {
+      return res.status(400).render("edit-profile.pug", {
+        pageTitle,
+        errorMessage: `This username is already taken`,
+      });
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { name, email, username, location },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+
+  return res.redirect("/");
+};
+
+export const getChangePassword = (req, res) => {
+  return res.render("users/change-password.pug", {
+    pageTitle: "Change Password",
+  });
+};
+export const postChangePassword = async (req, res) => {
+  const { old, change, confirm } = req.body;
+  const { _id, password } = req.session.user;
+
+  const ok = await bcrypt.compare(old, password);
+  if (!ok) {
+    res.status(400).render("users/change-profile.pug", {
+      pageTitle: "Change Password",
+      errorMessage: "Current password is incorrect",
+    });
+  }
+
+  if (change !== confirm) {
+    res.status(400).render("users/change-profile.pug", {
+      pageTitle: "Change Password",
+      errorMessage: "Password is not confirmed",
+    });
+  }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { password: change },
+    { new: true }
+  );
+  await updatedUser.save();
+  return res.redirect("/users/logout");
+};
+
 export const see = (req, res) => res.send("See User");
