@@ -2,21 +2,22 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
-export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
+export const getJoin = (req, res) =>
+  res.render("users/join", { pageTitle: "Join" });
 
 export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
   const pageTitle = "Join";
 
   if (password !== password2) {
-    return res.status(400).render("join", {
+    return res.status(400).render("users/join", {
       pageTitle,
       errorMessage: "Password confirmation does not match",
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
-    return res.status(400).render("join", {
+    return res.status(400).render("users/join", {
       pageTitle,
       errorMessage: "This username or email is already taken",
     });
@@ -32,7 +33,7 @@ export const postJoin = async (req, res) => {
     });
     return res.redirect("/login");
   } catch (error) {
-    return res.status(400).render("join", {
+    return res.status(400).render("users/join", {
       pageTitle,
       errorMessage: error._message,
     });
@@ -41,7 +42,7 @@ export const postJoin = async (req, res) => {
 
 //로그인 페이지입니다//
 export const getLogin = (req, res) => {
-  return res.render("login.pug", { pageTitle: "Login" });
+  return res.render("users/login.pug", { pageTitle: "Login" });
 };
 
 export const postLogin = async (req, res) => {
@@ -51,7 +52,7 @@ export const postLogin = async (req, res) => {
 
   //계정 있는지 확인
   if (!user) {
-    return res.status(400).render("login.pug", {
+    return res.status(400).render("users/login.pug", {
       pageTitle,
       errorMessage: "There is no such an account",
     });
@@ -59,7 +60,7 @@ export const postLogin = async (req, res) => {
   //PW 확인
   const checkPW = await bcrypt.compare(password, user.password);
   if (!checkPW) {
-    return res.status(400).render("login.pug", {
+    return res.status(400).render("users/login.pug", {
       pageTitle,
       errorMessage: "Wrong Password",
     });
@@ -150,32 +151,35 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) =>
-  res.render("edit-profile.pug", { pageTitle: "Edit User!" });
+  res.render("users/edit-profile.pug", { pageTitle: "Edit User!" });
 
 export const postEdit = async (req, res) => {
   const pageTitle = "Edit User";
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarURL },
     },
     body: { name, email, username, location },
+    file,
   } = req;
 
+  console.log(email);
+  console.log(req.session.user.email);
   //error check
-  if (email !== req.session.email) {
+  if (email !== req.session.user.email) {
     const exists = await User.exists({ email });
     if (exists) {
-      return res.status(400).render("edit-profile.pug", {
+      return res.status(400).render("users/edit-profile.pug", {
         pageTitle,
         errorMessage: `This email is already taken`,
       });
     }
   }
 
-  if (username !== req.session.username) {
+  if (username !== req.session.user.username) {
     const exists = await User.exists({ username });
     if (exists) {
-      return res.status(400).render("edit-profile.pug", {
+      return res.status(400).render("users/edit-profile.pug", {
         pageTitle,
         errorMessage: `This username is already taken`,
       });
@@ -184,7 +188,13 @@ export const postEdit = async (req, res) => {
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { name, email, username, location },
+    {
+      avatarURL: file ? file.path : avatarURL,
+      name,
+      email,
+      username,
+      location,
+    },
     { new: true }
   );
   req.session.user = updatedUser;
