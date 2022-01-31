@@ -1,10 +1,10 @@
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import bcrpyt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
-  avatarURL: String,
-  githubOnly: { type: Boolean, default: false },
+  avatarUrl: String,
+  socialOnly: { type: Boolean, default: false },
   username: { type: String, required: true, unique: true },
   password: { type: String },
   name: { type: String, required: true },
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function () {
   if (this.isModified("password")) {
-    this.password = await bcrpyt.hash(this.password, 5);
+    this.password = await bcrypt.hash(this.password, 5);
   }
 });
 
