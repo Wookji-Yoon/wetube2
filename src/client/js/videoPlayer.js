@@ -123,9 +123,20 @@ const handleMouseLeave = () => {
   videoController.classList.remove("showing");
 };
 
-//video에 mouseleave하면 컨트롤러 사라짐
-//video 위에서 마우스 움직이지 않으면 컨트롤러 사라짐
-//video 위에 있더라도 컨트롤러 위에 있으면 컨트롤러 사라지지 않음
+const handleMouseOn = () => {
+  clearTimeout(timeOutId);
+  videoController.classList.add("showing");
+};
+
+const handleVideoClick = () => {
+  videoPlay();
+};
+
+const handleView = () => {
+  const { id } = videoContainer.dataset;
+  console.log(id);
+  fetch(`/api/videos/${id}/view`);
+};
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
@@ -135,8 +146,11 @@ timeline.addEventListener("mousedown", handleTimelineMousedown);
 timeline.addEventListener("mouseup", handleTimelineMouseup);
 video.addEventListener("loadedmetadata", handleMeta);
 video.addEventListener("timeupdate", handleTime);
-video.addEventListener("mouseleave", handleMouseLeave);
-video.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("click", handleVideoClick);
+video.addEventListener("ended", handleView);
+videoContainer.addEventListener("mouseleave", handleMouseLeave);
+videoContainer.addEventListener("mousemove", handleMouseMove);
+videoController.addEventListener("mouseover", handleMouseOn);
 fullScreenBtn.addEventListener("click", handleFullScreenBtn);
 document.addEventListener("fullscreenchange", handleFullScreen);
 document.addEventListener("keydown", handleKey);

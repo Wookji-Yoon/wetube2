@@ -1,0 +1,50 @@
+#videoContainer {
+  width: 100%;
+  position: relative;
+  font-size: 20px;
+  video {
+    width: 100%;
+  }
+  #videoController {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    &.showing {
+      opacity: 1;
+    }
+    position: absolute;
+    background-color: #0f1117;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr auto;
+    gap: 10px;
+    width: 95%;
+    border-radius: 10px;
+    align-items: center;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    margin: 0 auto;
+    justify-content: space-between;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    .controller_play {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+    .controller_timeline {
+      width: 100%;
+      input {
+        width: 95%;
+      }
+    }
+    .controller_volume {
+      display: flex;
+      align-items: center;
+      input {
+        margin-left: 10px;
+        width: 85%;
+      }
+    }
+  }
+}
