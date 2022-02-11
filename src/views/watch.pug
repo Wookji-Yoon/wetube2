@@ -16,17 +16,38 @@ block content
                 i#mute.fas.fa-volume-up
                 input(type="range", step="0.1", value=0.5, min="0", max="1")#volume
             i#fullScreen.fas.fa-expand
-    //-
+    div.video__data   
         div
             p=video.description
-            small=video.createdAt
+            br
         div
+            small=video.createdAt
+            br
             small Uploaded by 
                 a(href=`/users/${video.owner._id}`)=video.owner.name
         if String(video.owner._id) === String(loggedInUser._id)
             a(href=`${video.id}/edit`) Edit Video &rarr;
             br
             a(href=`${video.id}/delete`) Delete Video &rarr;
+    if loggedIn
+        div.video__add-comments
+            form.video__form#commentForm
+                textarea(cols="40", rows="3", placeholder="Write a nice comment..")
+                input(type="submit", value = "Add Comment") 
+    div.video__comments
+        ul
+            each comment in video.comments.reverse()
+                li.video__comment(data-id=comment._id)
+                    div 
+                        i.fas.fa-comment 
+                        span=comment.text
+                    div
+                        small commented by 
+                            a(href=`/users/${comment.owner._id}`)=comment.owner.name
+                    div
+                        if String(comment.owner._id) === String(loggedInUser._id)
+                            span ❌
 
 block script
     script(src="/static/js/videoPlayer.js")
+    script(src="/static/js/commentSection.js")

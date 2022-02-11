@@ -5,11 +5,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   avatarUrl: String,
   socialOnly: { type: Boolean, default: false },
-  username: { type: String, required: true, unique: true },
+  username: { type: String, unique: true },
   password: { type: String },
   name: { type: String, required: true },
   location: String,
-  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 });
 
 userSchema.pre("save", async function () {

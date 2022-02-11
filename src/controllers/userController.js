@@ -57,6 +57,7 @@ export const postLogin = async (req, res) => {
   }
   req.session.loggedIn = true;
   req.session.user = user;
+  req.flash("info", "Hi!");
   return res.redirect("/");
 };
 
@@ -99,6 +100,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
+    console.log(userData);
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -117,10 +119,8 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       user = await User.create({
         avatarUrl: userData.avatar_url,
-        name: userData.name,
-        username: userData.login,
+        name: userData.login,
         email: emailObj.email,
-        password: "",
         socialOnly: true,
         location: userData.location,
       });
@@ -134,7 +134,10 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  req.session.user = null;
+  res.locals.loggedInUser = req.session.user;
+  req.session.loggedIn = false;
+  req.flash("info", "Bye!");
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
@@ -145,7 +148,7 @@ export const postEdit = async (req, res) => {
     session: {
       user: { _id, avatarUrl },
     },
-    body: { name, email, username, location },
+    body: { name, email, location },
     file,
   } = req;
   const updatedUser = await User.findByIdAndUpdate(
@@ -154,7 +157,6 @@ export const postEdit = async (req, res) => {
       avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
-      username,
       location,
     },
     { new: true }

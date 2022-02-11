@@ -1,0 +1,44 @@
+.video__data {
+  font-size: 20px;
+  margin-bottom: 50px;
+}
+
+#commentForm {
+  max-width: 800px;
+  textarea {
+    width: 100%;
+    font-size: 20px;
+    &::placeholder {
+      font-size: 20px;
+    }
+  }
+  input {
+    width: 30%;
+    padding: 0;
+    height: 30px;
+  }
+}
+
+.video__comments {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 20px;
+  .video__comment {
+    display: grid;
+    grid-template-columns: 1fr auto 22px;
+    gap: 5px;
+    padding: 10px 15px;
+    border-radius: 9999px;
+    background-color: white;
+    color: black;
+    margin-bottom: 10px;
+    i {
+      margin-right: 10px;
+    }
+    a {
+      text-decoration: underline;
+    }
+  }
+}

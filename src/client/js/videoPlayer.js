@@ -8,6 +8,7 @@ const timeline = document.getElementById("timeline");
 const videoContainer = document.getElementById("videoContainer");
 const fullScreenBtn = document.getElementById("fullScreen");
 const videoController = document.getElementById("videoController");
+const commentForm = document.getElementById("commentForm");
 
 video.volume = 0.5;
 let timeOutId = null;
@@ -105,7 +106,6 @@ const handleKey = (event) => {
   if (event.code === "KeyF" && !document.fullscreenElement) {
     videoContainer.requestFullscreen();
   }
-  console.log(event);
   if (event.code === "Space") {
     videoPlay();
   }
@@ -138,6 +138,14 @@ const handleView = () => {
   fetch(`/api/videos/${id}/view`);
 };
 
+const handleCommentFocusIn = () => {
+  document.removeEventListener("keydown", handleKey);
+};
+
+const handleCommentFocusOut = () => {
+  document.addEventListener("keydown", handleKey);
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -154,6 +162,8 @@ videoController.addEventListener("mouseover", handleMouseOn);
 fullScreenBtn.addEventListener("click", handleFullScreenBtn);
 document.addEventListener("fullscreenchange", handleFullScreen);
 document.addEventListener("keydown", handleKey);
+commentForm.addEventListener("focusin", handleCommentFocusIn);
+commentForm.addEventListener("focusout", handleCommentFocusOut);
 
 if (video.readyState == 4) {
   handleMeta();
