@@ -162,8 +162,11 @@ videoController.addEventListener("mouseover", handleMouseOn);
 fullScreenBtn.addEventListener("click", handleFullScreenBtn);
 document.addEventListener("fullscreenchange", handleFullScreen);
 document.addEventListener("keydown", handleKey);
-commentForm.addEventListener("focusin", handleCommentFocusIn);
-commentForm.addEventListener("focusout", handleCommentFocusOut);
+
+if (commentForm) {
+  commentForm.addEventListener("focusin", handleCommentFocusIn);
+  commentForm.addEventListener("focusout", handleCommentFocusOut);
+}
 
 if (video.readyState == 4) {
   handleMeta();

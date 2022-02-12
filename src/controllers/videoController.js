@@ -69,8 +69,8 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const fileUrl = req.files[0].path;
-  const thumbUrl = req.files[1].path;
+  const fileUrl = req.files[0].location;
+  const thumbUrl = req.files[1].location;
 
   const { title, description, hashtags } = req.body;
   try {

@@ -61,7 +61,7 @@ const handleStart = () => {
     recordBtn.innerText = "녹화완료! Download!";
     recordBtn.disabled = false;
     recording.stop();
-  }, 3000);
+  }, 3500);
 };
 
 const handleDownload = async () => {
