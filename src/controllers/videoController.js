@@ -69,8 +69,9 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const fileUrl = req.files[0].location;
-  const thumbUrl = req.files[1].location;
+  const isHeroku = process.env.NODE_ENV === "production";
+  const fileUrl = isHeroku ? req.files[0].location : req.files[0].path;
+  const thumbUrl = isHeroku ? req.files[1].location : req.files[1].path;
 
   const { title, description, hashtags } = req.body;
   try {
